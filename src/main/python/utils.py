@@ -20,3 +20,40 @@ def create_time_period_in_ymd_format(days=365):
     year_before = datetime.date.today() - datetime.timedelta(days)
     year_before = year_before.strftime("%Y-%m-%d")
     return today, year_before
+
+
+def rename_quotes_columns(data):
+    names = {
+        "c": "Close",
+        "o": "Open",
+        "h": "High",
+        "l": "Low",
+        "t": "Date",
+        "v": "Volume",
+        "s": "Status",
+    }
+    try:
+        return data.rename(columns=names)
+    except KeyError:
+        return data.reset_index().rename(columns=names)
+
+
+def flatten_json(y):
+    out = {}
+
+    def flatten(x, name=''):
+        if type(x) is dict:
+            for a in x:
+                flatten(x[a], name + a + '_')
+        elif type(x) is list:
+            i = 0
+            for a in x:
+                flatten(a, name + str(i) + '_')
+                i += 1
+        else:
+            out[name[:-1]] = x
+
+    flatten(y)
+    return out
+
+
