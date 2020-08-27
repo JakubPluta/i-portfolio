@@ -70,3 +70,4 @@ class Stock:
     def _transform_annual_metrics_to_data_frame(self):
         return pd.DataFrame.from_dict(self._annual_metrics_json, orient='index').transpose()
 
+
