@@ -2,6 +2,8 @@ from utils import *
 import finnhub as fh
 import os
 import pandas as pd
+from returns import *
+
 
 api_key = os.environ.get("FH_API_KEY")
 
@@ -17,22 +19,26 @@ class Stock:
 
     def __init__(self, ticker):
         self._ticker = ticker
+        self._mean_returns = None
+        self._volatility = None
+
         self._annual_metrics_json = {}
         self._current_metrics_json = {}
         self._quotes_json = {}
         self._info_json = {}
 
-        self.get_metrics()
-        self.get_quotes()
-        self.get_company_info()
+        self.__get_metrics()
+        self.__get_quotes()
+        self.__get_company_info()
+        self.__calculate_mean_returns_volatility()
 
     def show_api_key(self):
         print(self.client.api_key)
 
-    def get_company_info(self):
+    def __get_company_info(self):
         self._info_json = self.client.company_profile(symbol=self._ticker)
 
-    def get_metrics(self):
+    def __get_metrics(self):
         """Get financial metrics from Finnhub API
         :return: Financial Metrics for current year, and also list of annual KPI's for other years
         """
@@ -41,14 +47,14 @@ class Stock:
         if metrics.get("series"):
             self._annual_metrics_json = metrics["series"]["annual"]
 
-    def get_quotes(self):
+    def __get_quotes(self):
         """Get quotes for stock for last 5 years.
         :return: quotes of stock with Open, High, Low, Close, Volume, Timestamp
         """
         _to, _from = create_unix_timestamps(365 * 5)  # 5 years
         self._quotes_json = self.client.stock_candles(self._ticker, "D", _from, _to)
 
-    def _transform_quotes_to_data_frame(self):
+    def get_quotes_df(self):
         """Transforms json quotes of stock into pandas DataFrame object.
         renaming columns, changing order, and transforming date timestamp to date
         :return:
@@ -58,9 +64,9 @@ class Stock:
             raise ValueError("The data frame with Quotes is empty!")
         data = rename_quotes_columns(data)
         data["Date"] = pd.to_datetime(data["Date"], unit="s").dt.date
-        return data[["Date", "Open", "Low", "High", "Close", "Volume"]]
+        return data[["Date", "Open", "Low", "High", "Close", "Volume"]].set_index("Date")
 
-    def _transform_current_metrics_to_data_frame(self):
+    def get_current_metrics_df(self):
         current = pd.DataFrame(self._current_metrics_json.items())
         current.columns = ["KPI", "Value"]
         return current
@@ -70,4 +76,7 @@ class Stock:
     def _transform_annual_metrics_to_data_frame(self):
         return pd.DataFrame.from_dict(self._annual_metrics_json, orient='index').transpose()
 
-
+    def __calculate_mean_returns_volatility(self):
+        returns = calculate_daily_returns(self.get_quotes_df()["Close"])
+        self._mean_returns = calculate_mean_daily_returns(returns)
+        self._volatility = calculate_std_of_returns(returns)

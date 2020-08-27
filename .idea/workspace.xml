@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b3146e6d-261d-4394-a458-5f802305c598" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/python/returns.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/python/tests/test_returns.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/python/markovitz.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/python/markovitz.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/python/portfolio.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/python/portfolio.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/python/tests/test_weights_optimizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/python/tests/test_weights_optimizer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/python/weights_optimizer.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/python/weights_optimizer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/python/stock.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/python/stock.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -34,10 +33,10 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="ignore_missing_gitignore" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/python/tests/test_weights_optimizer.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/python/tests/test_returns.py" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
-  <component name="RunManager" selected="Python tests.pytest in test_weights_optimizer.py">
+  <component name="RunManager" selected="Python tests.pytest in test_returns.py">
     <configuration name="client" type="PythonConfigurationType" factoryName="Python">
       <module name="iportfolio" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -80,6 +79,21 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="pytest in test_returns.py" type="tests" factoryName="py.test" nameIsGenerated="true">
+      <module name="iportfolio" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="C:\Users\Jakub\Anaconda3\envs\Projects\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/main/python/tests" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="_new_keywords" value="&quot;&quot;" />
+      <option name="_new_additionalArguments" value="&quot;&quot;" />
+      <option name="_new_target" value="&quot;$PROJECT_DIR$/src/main/python/tests/test_returns.py&quot;" />
+      <option name="_new_targetType" value="&quot;PATH&quot;" />
+      <method v="2" />
+    </configuration>
     <configuration name="pytest in test_weights_optimizer.py" type="tests" factoryName="py.test" nameIsGenerated="true">
       <module name="iportfolio" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -99,6 +113,7 @@
       <item itemvalue="Python.portfolio" />
       <item itemvalue="Python.client" />
       <item itemvalue="Python tests.pytest in test_weights_optimizer.py" />
+      <item itemvalue="Python tests.pytest in test_returns.py" />
     </list>
   </component>
   <component name="SvnConfiguration">
@@ -115,61 +130,61 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="2199" y="-209" width="1089" height="705" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1598514032242">
+    <state x="2199" y="-209" width="1089" height="705" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1598549231467">
       <screen x="1920" y="-295" width="1920" height="1040" />
     </state>
     <state x="223" y="68" width="1089" height="705" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824/1920.-295.1920.1040@0.0.1536.824" timestamp="1598292909695" />
-    <state x="2199" y="-209" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598514032242" />
-    <state x="2457" y="-38" width="978" height="753" key="#xdebugger.evaluate" timestamp="1598526750531">
+    <state x="2199" y="-209" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598549231467" />
+    <state x="2457" y="-38" width="978" height="753" key="#xdebugger.evaluate" timestamp="1598549385881">
       <screen x="1920" y="-295" width="1920" height="1040" />
     </state>
     <state x="524" y="121" key="#xdebugger.evaluate/0.0.1536.824/1920.-295.1920.1040@0.0.1536.824" timestamp="1598293024889" />
-    <state x="2457" y="-38" width="978" height="753" key="#xdebugger.evaluate/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598526750531" />
-    <state x="2605" y="-72" key="FileChooserDialogImpl" timestamp="1598514031516">
+    <state x="2457" y="-38" width="978" height="753" key="#xdebugger.evaluate/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598549385881" />
+    <state x="2605" y="-72" key="FileChooserDialogImpl" timestamp="1598549230911">
       <screen x="1920" y="-295" width="1920" height="1040" />
     </state>
     <state x="548" y="177" key="FileChooserDialogImpl/0.0.1536.824/1920.-295.1920.1040@0.0.1536.824" timestamp="1598292908257" />
-    <state x="2605" y="-72" key="FileChooserDialogImpl/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598514031516" />
-    <state width="1877" height="347" key="GridCell.Tab.0.bottom" timestamp="1598526942197">
+    <state x="2605" y="-72" key="FileChooserDialogImpl/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598549230911" />
+    <state width="1877" height="347" key="GridCell.Tab.0.bottom" timestamp="1598551293852">
       <screen x="1920" y="-295" width="1920" height="1040" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.-295.1920.1040@0.0.1536.824" timestamp="1598294039002" />
-    <state width="1877" height="347" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598526942197" />
-    <state width="1877" height="347" key="GridCell.Tab.0.center" timestamp="1598526942197">
+    <state width="1877" height="347" key="GridCell.Tab.0.bottom/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598551293852" />
+    <state width="1877" height="347" key="GridCell.Tab.0.center" timestamp="1598551293851">
       <screen x="1920" y="-295" width="1920" height="1040" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.center/0.0.1536.824/1920.-295.1920.1040@0.0.1536.824" timestamp="1598294039002" />
-    <state width="1877" height="347" key="GridCell.Tab.0.center/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598526942197" />
-    <state width="1877" height="347" key="GridCell.Tab.0.left" timestamp="1598526942197">
+    <state width="1877" height="347" key="GridCell.Tab.0.center/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598551293851" />
+    <state width="1877" height="347" key="GridCell.Tab.0.left" timestamp="1598551293851">
       <screen x="1920" y="-295" width="1920" height="1040" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.left/0.0.1536.824/1920.-295.1920.1040@0.0.1536.824" timestamp="1598294039002" />
-    <state width="1877" height="347" key="GridCell.Tab.0.left/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598526942197" />
-    <state width="1877" height="347" key="GridCell.Tab.0.right" timestamp="1598526942197">
+    <state width="1877" height="347" key="GridCell.Tab.0.left/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598551293851" />
+    <state width="1877" height="347" key="GridCell.Tab.0.right" timestamp="1598551293851">
       <screen x="1920" y="-295" width="1920" height="1040" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.0.right/0.0.1536.824/1920.-295.1920.1040@0.0.1536.824" timestamp="1598294039002" />
-    <state width="1877" height="347" key="GridCell.Tab.0.right/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598526942197" />
-    <state width="1877" height="347" key="GridCell.Tab.1.bottom" timestamp="1598526940189">
+    <state width="1877" height="347" key="GridCell.Tab.0.right/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598551293851" />
+    <state width="1877" height="347" key="GridCell.Tab.1.bottom" timestamp="1598551297263">
       <screen x="1920" y="-295" width="1920" height="1040" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.1.bottom/0.0.1536.824/1920.-295.1920.1040@0.0.1536.824" timestamp="1598294039002" />
-    <state width="1877" height="347" key="GridCell.Tab.1.bottom/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598526940189" />
-    <state width="1877" height="347" key="GridCell.Tab.1.center" timestamp="1598526940189">
+    <state width="1877" height="347" key="GridCell.Tab.1.bottom/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598551297263" />
+    <state width="1877" height="347" key="GridCell.Tab.1.center" timestamp="1598551297263">
       <screen x="1920" y="-295" width="1920" height="1040" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.1.center/0.0.1536.824/1920.-295.1920.1040@0.0.1536.824" timestamp="1598294039002" />
-    <state width="1877" height="347" key="GridCell.Tab.1.center/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598526940189" />
-    <state width="1877" height="347" key="GridCell.Tab.1.left" timestamp="1598526940189">
+    <state width="1877" height="347" key="GridCell.Tab.1.center/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598551297263" />
+    <state width="1877" height="347" key="GridCell.Tab.1.left" timestamp="1598551297262">
       <screen x="1920" y="-295" width="1920" height="1040" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.1.left/0.0.1536.824/1920.-295.1920.1040@0.0.1536.824" timestamp="1598294039002" />
-    <state width="1877" height="347" key="GridCell.Tab.1.left/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598526940189" />
-    <state width="1877" height="347" key="GridCell.Tab.1.right" timestamp="1598526940189">
+    <state width="1877" height="347" key="GridCell.Tab.1.left/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598551297262" />
+    <state width="1877" height="347" key="GridCell.Tab.1.right" timestamp="1598551297263">
       <screen x="1920" y="-295" width="1920" height="1040" />
     </state>
     <state width="1493" height="261" key="GridCell.Tab.1.right/0.0.1536.824/1920.-295.1920.1040@0.0.1536.824" timestamp="1598294039002" />
-    <state width="1877" height="347" key="GridCell.Tab.1.right/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598526940189" />
+    <state width="1877" height="347" key="GridCell.Tab.1.right/0.0.1536.824/1920.-295.1920.1040@1920.-295.1920.1040" timestamp="1598551297263" />
     <state width="969" height="529" key="XDebugger.FullValuePopup" timestamp="1598454106158">
       <screen x="1920" y="-295" width="1920" height="1040" />
     </state>
@@ -180,8 +195,8 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/src/main/python/tests/test_weights_optimizer.py</url>
-          <line>34</line>
+          <url>file://$PROJECT_DIR$/src/main/python/tests/test_returns.py</url>
+          <line>11</line>
           <option name="timeStamp" value="4" />
         </line-breakpoint>
       </breakpoints>
