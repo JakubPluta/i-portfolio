@@ -1,5 +1,5 @@
 from stock import Stock
-import cv
+
 
 class Portfolio:
 

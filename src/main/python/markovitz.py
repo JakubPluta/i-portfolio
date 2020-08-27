@@ -1,4 +1,4 @@
-
+from cvxpy import *
 
 
 class MarkowitzPortfolio():
