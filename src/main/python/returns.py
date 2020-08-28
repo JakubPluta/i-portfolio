@@ -18,10 +18,6 @@ def calculate_daily_logarithmic_returns(data: pd.DataFrame):
     return np.log(1 + data.pct_change()).dropna(how="all")
 
 
-def __calculate_daily_logarithmic_returns(data: pd.DataFrame):
-    return np.log(data / data.shift(1))
-
-
 def historical_mean_return(data: pd.DataFrame, trading_days=252):
     return calculate_daily_returns(data).mean() * trading_days
 
