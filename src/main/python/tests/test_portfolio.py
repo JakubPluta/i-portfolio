@@ -14,7 +14,7 @@ def test_portfolio_should_be_created_from_list():
 
     assert portfolio
     assert len(tickers) == portfolio.ASSETS == len(portfolio._Portfolio__tickers)
-    assert sum(portfolio._Portfolio__weights) in [1,0.9999999999]
+    assert sum(portfolio._Portfolio__weights) in [1, 0.9999999999, 1.0000000000000002]
 
 
 def test_portfolio_should_be_created_from_dict():
@@ -28,4 +28,4 @@ def test_portfolio_should_be_created_from_dict():
 
     assert portfolio
     assert len(tickers.values()) == portfolio.ASSETS == len(portfolio._Portfolio__tickers)
-    assert sum(portfolio._Portfolio__weights) in [1, 0.9999999999]
+    assert sum(portfolio._Portfolio__weights) in [1, 0.9999999999, 1.0000000000000002]

@@ -46,14 +46,14 @@ class Portfolio:
             for ticker in tickers:
                 self.__tickers.append(Stock(ticker))
                 self.ASSETS += 1
-            self.__calculate_weights()
+            self.__weights = WeightsOptimizer(tickers=tickers).get_weights().tolist()
+            self.__zip_portfolio()
 
         elif isinstance(tickers, dict):
             for ticker, weight in tickers.items():
                 self.ASSETS += 1
                 self.__tickers.append(Stock(ticker))
-                self.__weights.append(weight)
-            self.__calculate_weights()
+            self.__weights = WeightsOptimizer(tickers=tickers.keys(), weights=tickers.values()).get_weights()
         self.__zip_portfolio()
 
     def __calculate_weights(self):
@@ -68,7 +68,7 @@ class Portfolio:
         self.__weights = [1 / len(self.__tickers) for ticker in self.__tickers]
 
     def __zip_portfolio(self):
-        if self.__weights and self.__tickers and len(self.__weights) == len(self.__tickers):
+        if (self.__weights and self.__tickers) and (len(self.__weights) == len(self.__tickers)):
             self._portfolio = dict(zip(self.__tickers, self.__weights))
 
     @staticmethod
