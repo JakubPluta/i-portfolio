@@ -19,28 +19,23 @@ class Stock:
 
     def __init__(self, ticker):
         self.ticker = ticker
-        self.mean_returns = None
-        self.volatility = None
-        self.log_daily_returns: pd.DataFrame
-
-        self.__annual_metrics_json = {}
-        self.__current_metrics_json = {}
-        self.__quotes_json = {}
-        self.__info_json = {}
-
-        self.__get_metrics()
-        self.__get_quotes()
-        self.__get_company_info()
-        self.__calculate_returns_and_volatility()
+        self.quotes = self.get_quotes()
+        self.metrics = self.get_current_metrics_df()
+        self.company_info = self.get_company_info()
+        self.expected_returns = self.calculate_expected_returns()
+        self.volatility = self.calculate_volatility()
+        self.daily_returns = self.calculate_daily_returns()
+        self.log_daily_returns = self.calculate_daily_log_returns()
 
     # Public methods
 
-    def get_quotes_df(self):
+    def get_quotes(self):
         """Transforms json quotes of stock into pandas DataFrame object.
         renaming columns, changing order, and transforming date timestamp to date
         :return:
         """
-        data = pd.DataFrame(self.__quotes_json)
+        quotes = self.__get_quotes()
+        data = pd.DataFrame(quotes)
         if data.empty:
             raise ValueError("The data frame with Quotes is empty!")
         data = rename_quotes_columns(data)
@@ -48,9 +43,25 @@ class Stock:
         return data[["Date", "Close"]].set_index("Date")
 
     def get_current_metrics_df(self):
-        current = pd.DataFrame(self.__current_metrics_json.items())
+        metrics = self.__get_metrics().items()
+        current = pd.DataFrame(metrics)
         current.columns = ["KPI", "Value"]
         return current
+
+    def get_company_info(self):
+        return pd.DataFrame(self.__get_company_info().items())
+
+    def calculate_daily_returns(self):
+        return calculate_daily_returns(self.quotes)
+
+    def calculate_daily_log_returns(self):
+        return calculate_daily_logarithmic_returns(self.quotes)
+
+    def calculate_expected_returns(self):
+        return historical_mean_return(self.quotes)
+
+    def calculate_volatility(self, trading_days=252):
+        return self.calculate_daily_returns().values.std() * np.sqrt(trading_days)
 
     # Private methods
 
@@ -58,30 +69,18 @@ class Stock:
         """Get basic company information
         :return: json with company information
         """
-        self.__info_json = self.client.company_profile(symbol=self.ticker)
+        return self.client.company_profile(symbol=self.ticker)
 
     def __get_metrics(self):
         """Get financial metrics from Finnhub API
-        :return: Financial Metrics for current year, and also list of annual KPI's for other years
+        :return: Financial Metrics for current year
         """
         metrics = self.client.company_basic_financials(self.ticker, "all")
-        self.__current_metrics_json = metrics.get("metric")
-
-        if metrics.get("series"):
-            self.__annual_metrics_json = metrics["series"]["annual"]
+        return metrics.get("metric")
 
     def __get_quotes(self):
         """Get quotes for stock for last 5 years.
         :return: quotes of stock with Open, High, Low, Close, Volume, Timestamp
         """
         _to, _from = create_unix_timestamps(365 * 5)  # 5 years
-        self.__quotes_json = self.client.stock_candles(self.ticker, "D", _from, _to)
-
-    def __calculate_returns_and_volatility(self):
-        """Calculates mean return, volatility and daily log returns
-        :return: log daily returns, mean returns, volatility
-        """
-        close_prices = self.get_quotes_df()
-        self.log_daily_returns = calculate_daily_logarithmic_returns(close_prices)
-        self.mean_returns = self.log_daily_returns.values.mean()
-        self.volatility = self.log_daily_returns.values.std()
+        return self.client.stock_candles(self.ticker, "D", _from, _to)

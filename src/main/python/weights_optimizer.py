@@ -36,6 +36,11 @@ class WeightsOptimizer:
     def create_portfolio(self, items: dict):
         if items:
             self.__ticker_weights_map = items
+
+    def create_random_weights(self):
+        weights = np.array(np.random.random(self.__number_of_tickers))
+        self.__weights = weights/np.sum(weights)
+        self.__zip_portfolio()
         
     def set_weights(self, stock: dict):
         for ticker, weight in stock.items():

@@ -19,7 +19,7 @@ def calculate_daily_logarithmic_returns(data: pd.DataFrame):
 
 
 def historical_mean_return(data: pd.DataFrame, trading_days=252):
-    return calculate_daily_returns(data).mean() * trading_days
+    return calculate_daily_returns(data).values.mean() * trading_days
 
 
 def calculate_sharpe_ratio(returns, risk_free_rate, trading_days=252):
