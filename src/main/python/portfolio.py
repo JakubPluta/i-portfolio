@@ -1,4 +1,5 @@
 from stock import Stock
+from weights_optimizer import WeightsOptimizer
 
 
 class Portfolio:
@@ -7,8 +8,6 @@ class Portfolio:
 
     def __init__(self):
         self.__tickers = []
-        self.__lower_band = 0
-        self.__upper_band = 1
         self.__weights = []
         self._portfolio = {}
 
@@ -51,8 +50,11 @@ class Portfolio:
 
         elif isinstance(tickers, dict):
             for ticker, weight in tickers.items():
+                self.ASSETS += 1
                 self.__tickers.append(Stock(ticker))
                 self.__weights.append(weight)
+            self.__calculate_weights()
+        self.__zip_portfolio()
 
     def __calculate_weights(self):
         # It needs to be always equal to 1

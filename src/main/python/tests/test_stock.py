@@ -10,6 +10,6 @@ def test_stock_should_be_created():
 
     # then
     assert stock
-    assert stock.client.api_key is not None
-    assert isinstance(stock, Stock)
-    assert stock._info is not None
+
+
+

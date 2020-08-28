@@ -3,6 +3,7 @@ import finnhub as fh
 import os
 import pandas as pd
 from returns import *
+from metrics import METRICS
 
 
 api_key = os.environ.get("FH_API_KEY")
@@ -46,7 +47,7 @@ class Stock:
         metrics = self.__get_metrics().items()
         current = pd.DataFrame(metrics)
         current.columns = ["KPI", "Value"]
-        return current
+        return current.fillna(0).set_index("KPI")
 
     def get_company_info(self):
         return pd.DataFrame(self.__get_company_info().items())
@@ -76,7 +77,8 @@ class Stock:
         :return: Financial Metrics for current year
         """
         metrics = self.client.company_basic_financials(self.ticker, "all")
-        return metrics.get("metric")
+        if metrics.get("metric"):
+            return {kpi: metrics.get("metric")[kpi] for kpi in METRICS}
 
     def __get_quotes(self):
         """Get quotes for stock for last 5 years.

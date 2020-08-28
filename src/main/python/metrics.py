@@ -1,23 +1,20 @@
 "https://blog.quantinsti.com/portfolio-management-strategy-python/#efficient"
 
+
+
+# TTM is a finance term that stands for trailing twelve months.
+# It represents a company’s financials in the last 12 consecutive months.
+
 METRICS = [
-    "cashRatio",
-    "currentRatio",
-    "ebitPerShare",
-    "eps",
-    "grossMargin",
-    "longtermDebtTotalAsset",
-    "longtermDebtTotalCapital",
-    "longtermDebtTotalEquity",
-    "netDebtToTotalCapital",
-    "netDebtToTotalEquity",
-    "netMargin",
-    "operatingMargin",
-    "pretaxMargin",
-    "salesPerShare",
-    "sgaToSale",
-    "totalDebtToEquity",
-    "totalDebtToTotalAsset",
-    "totalDebtToTotalCapital",
-    "totalRatio",
+    'bookValuePerShareAnnual',
+    'bookValueShareGrowth5Y',
+    'dividendPerShareAnnual',
+    'dividendsPerShareTTM',
+    'ebitdPerShareTTM',
+    'freeCashFlowPerShareTTM',
+    'revenueGrowth3Y',
+    'revenueGrowth5Y',
+    'roaeTTM',
+    'roeTTM',
+    'roiTTM',
 ]
