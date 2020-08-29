@@ -1,79 +1,93 @@
 from stock import Stock
 from weights_optimizer import WeightsOptimizer
 
+# Portfolio metrics
+
+# Annualised Returns
+# Annualised Volatility
+# Sharpe Ratio
+# Sortino Ratio
+# Beta
+# Treynor Ratio
+# Information Ratio
+# Skewness
+# Kurtosis
+# Maximum Drawdown
+# Number of Trades
+# Profit ratio
+# Holding period
+
 
 class Portfolio:
 
     ASSETS = 0
 
     def __init__(self):
+        """Portfolio should have tickers, amounts of investment like:
+            tickers = ["AMZN", "FB", "GOOG"]
+            amounts = [10000, 300000, 150000]
+        """
         self.__tickers = []
+        self.__amounts = []
         self.__weights = []
-        self._portfolio = {}
+        self.__portfolio = {}
+        self.__total_investment = None
 
-    def add_stock_to_portfolio(self, ticker):
-        if isinstance(ticker, str):
-            ticker = Stock(ticker)
-            self.__tickers.append(ticker)
+    def add_stock_to_portfolio(self, ticker: str, amount: (int, float)):
+        """
+        :param ticker: str ticker of company e.g facebook = FB
+        :param amount: int/float amount of invested money
+        :return: self.__portfolio: {"FB" : 10000}
+        """
+        if ticker not in self.__tickers:
+            self.__tickers.append(Stock(ticker))
+            self.__amounts.append(amount)
             self.ASSETS += 1
-        elif isinstance(ticker, list):
-            for tick in ticker:
-                tick = Stock(tick)
-                self.__tickers.append(tick)
-                self.ASSETS += 1
-        else:
-            raise ValueError("Please enter single ticker, or list of tickers")
+        self._update_portfolio()
 
-    def set_weights(self, tickers: dict):
-        """
-        :param tickers: dictionary with ticker list
-        :return:
-        """
-        self.__weights = tickers.values
-
-    def delete_stock_from_portfolio(self, ticker):
+    def delete_stock_from_portfolio(self, ticker: str):
         try:
-            self.__tickers.remove(ticker)
+            del self.__portfolio[ticker]
+            self.ASSETS -= 1
+            self._update_portfolio()
         except KeyError:
             print("Ticker not found")
 
-    def show_portfolio_items(self):
-        for ticker in self.__tickers:
-            print(ticker)
+    def create_portfolio(self, tickers: list, amounts: list):
+        if len(tickers) == len(amounts):
+            [self.__tickers.append(Stock(ticker)) for ticker in tickers]
+            self.__amounts = amounts
+            self._update_portfolio()
+            self.ASSETS = len(tickers)
 
-    def create_portfolio(self, tickers: (dict, list)):
-        if isinstance(tickers, list):
-            for ticker in tickers:
-                self.__tickers.append(Stock(ticker))
-                self.ASSETS += 1
-            self.__weights = WeightsOptimizer(tickers=tickers).get_weights().tolist()
-            self.__zip_portfolio()
+    def get_portfolio_items(self):
+        return self.__portfolio
 
-        elif isinstance(tickers, dict):
-            for ticker, weight in tickers.items():
-                self.ASSETS += 1
-                self.__tickers.append(Stock(ticker))
-            self.__weights = WeightsOptimizer(tickers=tickers.keys(), weights=tickers.values()).get_weights()
+    def get_weights(self):
+        return self.__weights
+
+    def get_tickers(self):
+        return self.__tickers
+
+    def _update_portfolio(self):
+        self.__calculate_weights()
+        self.__calculate_total_amount_invested()
         self.__zip_portfolio()
+
+    def __calculate_total_amount_invested(self):
+        self.__total_investment = sum(self.__amounts)
 
     def __calculate_weights(self):
         # It needs to be always equal to 1
-        self.__weights = [1/len(self.__tickers) for ticker in self.__tickers]
+        self.__weights = [amount/sum(self.__amounts) for amount in self.__amounts]
+
+    def __zip_portfolio(self):
+        if (self.__weights and self.__tickers) and (len(self.__weights) == len(self.__tickers)):
+            self.__portfolio = dict(zip(self.__tickers, self.__weights))
 
     def __validate_weights(self):
         if not sum(self.__weights) == 1:
             raise ValueError("Weights of all assets needs to be equal to 1\n"
                              "All of weights was set-up into equal.\n"
                              "If you want to change weights use set_weights() method")
-        self.__weights = [1 / len(self.__tickers) for ticker in self.__tickers]
 
-    def __zip_portfolio(self):
-        if (self.__weights and self.__tickers) and (len(self.__weights) == len(self.__tickers)):
-            self._portfolio = dict(zip(self.__tickers, self.__weights))
-
-    @staticmethod
-    def _validate_ticker(ticker: Stock):
-        if not ticker._info:
-            raise TypeError(f"Nothing found for given ticker {ticker}")
-        elif not isinstance(ticker, Stock):
-            raise TypeError("Provided ticker is not instance of Stock")
