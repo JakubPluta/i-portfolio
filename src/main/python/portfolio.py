@@ -27,6 +27,16 @@ class Portfolio:
             tickers = ["AMZN", "FB", "GOOG"]
             amounts = [10000, 300000, 150000]
         """
+
+        #TODO think about storing portfolio as dicts with 3 attr
+        """ 
+                portfolio = {
+                "FB" : {"Stock: Stock("FB"), "Weight" : 0.2, Amount: 20000} ,
+                "FB" : {"Stock: Stock("FB"), "Weight" : 0.2, Amount: 20000} ,
+                "FB" : {"Stock: Stock("FB"), "Weight" : 0.2, Amount: 20000} ,
+                }
+        """
+
         self.__tickers = []
         self.__amounts = []
         self.__weights = []
@@ -40,7 +50,7 @@ class Portfolio:
         :return: self.__portfolio: {"FB" : 10000}
         """
         if ticker not in self.__tickers:
-            self.__tickers.append(Stock(ticker))
+            self.__tickers.append(ticker)
             self.__amounts.append(amount)
             self.ASSETS += 1
         self._update_portfolio()
@@ -49,13 +59,15 @@ class Portfolio:
         try:
             del self.__portfolio[ticker]
             self.ASSETS -= 1
+            self.__tickers, self.__amounts = zip(*self.__portfolio.items())
+
             self._update_portfolio()
         except KeyError:
             print("Ticker not found")
 
     def create_portfolio(self, tickers: list, amounts: list):
         if len(tickers) == len(amounts):
-            [self.__tickers.append(Stock(ticker)) for ticker in tickers]
+            [self.__tickers.append(ticker) for ticker in tickers]
             self.__amounts = amounts
             self._update_portfolio()
             self.ASSETS = len(tickers)
@@ -68,6 +80,9 @@ class Portfolio:
 
     def get_tickers(self):
         return self.__tickers
+
+    def get_total_amount_invested(self):
+        return self.__total_investment
 
     def _update_portfolio(self):
         self.__calculate_weights()
@@ -82,8 +97,8 @@ class Portfolio:
         self.__weights = [amount/sum(self.__amounts) for amount in self.__amounts]
 
     def __zip_portfolio(self):
-        if (self.__weights and self.__tickers) and (len(self.__weights) == len(self.__tickers)):
-            self.__portfolio = dict(zip(self.__tickers, self.__weights))
+        if (self.__weights and self.__tickers) and (len(self.__amounts) == len(self.__amounts)):
+            self.__portfolio = dict(zip(self.__tickers, self.__amounts))
 
     def __validate_weights(self):
         if not sum(self.__weights) == 1:
@@ -91,3 +106,8 @@ class Portfolio:
                              "All of weights was set-up into equal.\n"
                              "If you want to change weights use set_weights() method")
 
+
+
+#TODO add New Class that creates Portfolio that Contains Stock objects, and weights
+class InvPortfolio(Portfolio):
+    pass
