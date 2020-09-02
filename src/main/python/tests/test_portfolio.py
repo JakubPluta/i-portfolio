@@ -1,6 +1,6 @@
 from portfolio import Portfolio
 from stock import Stock
-
+import pandas as pd
 
 
 def test_portfolio_should_be_created():
@@ -39,7 +39,8 @@ def test_stock_should_be_deleted():
     portfolio.create_portfolio(tickers, amounts)
 
     portfolio.delete_stock_from_portfolio(ticker="FB")
-
+    cov = portfolio.calculate_cov()
     assert portfolio.get_total_amount_invested() == 60000
     assert portfolio.ASSETS == 2
     assert round(sum(portfolio._Portfolio__weights)) == 1
+    assert isinstance(cov,pd.DataFrame)

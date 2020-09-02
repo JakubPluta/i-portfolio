@@ -17,6 +17,9 @@ from weights_optimizer import WeightsOptimizer
 # Profit ratio
 # Holding period
 
+import pandas as pd
+
+
 
 class Portfolio:
 
@@ -89,6 +92,7 @@ class Portfolio:
         self.__calculate_total_amount_invested()
         self.__zip_portfolio()
 
+
     def __calculate_total_amount_invested(self):
         self.__total_investment = sum(self.__amounts)
 
@@ -106,8 +110,12 @@ class Portfolio:
                              "All of weights was set-up into equal.\n"
                              "If you want to change weights use set_weights() method")
 
+    def calculate_cov(self):
+        returns = {}
 
+        for ticker in self.__tickers:
+            returns[ticker] = Stock(ticker).log_daily_returns["Close"].to_list()
 
-#TODO add New Class that creates Portfolio that Contains Stock objects, and weights
-class InvPortfolio(Portfolio):
-    pass
+        returns_df = pd.DataFrame(returns)
+        covariance = returns_df.cov()
+        return covariance
