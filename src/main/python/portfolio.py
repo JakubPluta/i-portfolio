@@ -46,6 +46,13 @@ class Portfolio:
         self.__portfolio = {}
         self.__total_investment = None
 
+    def create_portfolio(self, tickers: list, amounts: list):
+        if len(tickers) == len(amounts):
+            self.__tickers = tickers
+            self.__amounts = amounts
+            self._update_portfolio()
+            self.ASSETS = len(tickers)
+
     def add_stock_to_portfolio(self, ticker: str, amount: (int, float)):
         """
         :param ticker: str ticker of company e.g facebook = FB
@@ -63,35 +70,79 @@ class Portfolio:
             del self.__portfolio[ticker]
             self.ASSETS -= 1
             self.__tickers, self.__amounts = zip(*self.__portfolio.items())
-
             self._update_portfolio()
         except KeyError:
             print("Ticker not found")
 
-    def create_portfolio(self, tickers: list, amounts: list):
-        if len(tickers) == len(amounts):
-            [self.__tickers.append(ticker) for ticker in tickers]
-            self.__amounts = amounts
-            self._update_portfolio()
-            self.ASSETS = len(tickers)
-
-    def get_portfolio_items(self):
-        return self.__portfolio
-
-    def get_weights(self):
+    @property
+    def amounts(self):
         return self.__weights
 
-    def get_tickers(self):
+    @amounts.setter
+    def amounts(self, amounts: list):
+        if len(amounts) == len(self.__tickers):
+            self.__amounts = amounts
+        else:
+            raise ValueError(f"Number of amounts is not equal to number of tickers\n"
+                             f"List of tickers: {self.__tickers}\n"
+                             f"List of amounts: {amounts}")
+
+    @property
+    def tickers(self):
         return self.__tickers
 
-    def get_total_amount_invested(self):
+    @tickers.setter
+    def tickers(self, tickers: list):
+        if len(tickers) == len(self.__amounts):
+            self.__tickers = tickers
+        else:
+            self.__tickers = tickers
+            print(f"Ticker's are set to {self.__tickers}\n"
+                  f"Now you need to set amounts")
+
+    @property
+    def portfolio(self):
+        return self.__portfolio
+
+    @portfolio.setter
+    def portfolio(self, portfolio: dict):
+        if portfolio:
+            self.__tickers, self.__amounts = zip(*portfolio.items())
+            self._update_portfolio()
+            self.ASSETS = len(portfolio.keys())
+
+    @portfolio.deleter
+    def portfolio(self):
+        print("Deleting portfolio")
+        del self.portfolio
+        self._update_portfolio()
+        self.ASSETS = 0
+
+    @property
+    def weights(self):
+        return self.__weights
+
+    @weights.setter
+    def weights(self, weights):
+        if len(weights) == len(self.__tickers):
+            self.__weights = weights
+        self.__amounts = self.__total_investment * [self.__weights]
+        self._update_portfolio()
+        self.ASSETS = len(self.__amounts)
+
+    @property
+    def total_amount_invested(self):
         return self.__total_investment
+
+    @total_amount_invested.setter
+    def total_amount_invested(self, total_amount_invested):
+        self.__total_investment = total_amount_invested
+        self.__amounts = total_amount_invested * [self.__weights]
 
     def _update_portfolio(self):
         self.__calculate_weights()
         self.__calculate_total_amount_invested()
         self.__zip_portfolio()
-
 
     def __calculate_total_amount_invested(self):
         self.__total_investment = sum(self.__amounts)
@@ -107,8 +158,8 @@ class Portfolio:
     def __validate_weights(self):
         if not sum(self.__weights) == 1:
             raise ValueError("Weights of all assets needs to be equal to 1\n"
-                             "All of weights was set-up into equal.\n"
-                             "If you want to change weights use set_weights() method")
+                             "All of weights were set-up into equal.\n"
+                             "If you want to change weights go with weights, or amounts property")
 
     def calculate_cov(self):
         returns = {}
@@ -119,3 +170,10 @@ class Portfolio:
         returns_df = pd.DataFrame(returns)
         covariance = returns_df.cov()
         return covariance
+
+    def calculate_std(self):
+        pass
+
+    def calculate_expected_returns(self):
+        pass
+

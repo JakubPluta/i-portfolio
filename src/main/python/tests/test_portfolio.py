@@ -11,11 +11,11 @@ def test_portfolio_should_be_created():
     # when
     portfolio = Portfolio()
 
-    portfolio.create_portfolio(tickers, amounts)
+    portfolio.portfolio = dict(zip(tickers, amounts))
 
     assert portfolio
-    assert len(tickers) == portfolio.ASSETS == len(portfolio._Portfolio__tickers)
-    assert round(sum(portfolio._Portfolio__weights)) == 1
+    assert len(tickers) == portfolio.ASSETS == len(portfolio.tickers)
+    assert round(sum(portfolio.weights)) == 1
 
 
 def test_stock_should_be_added():
@@ -27,10 +27,10 @@ def test_stock_should_be_added():
 
     portfolio.add_stock_to_portfolio(ticker="GOOG", amount=25000)
 
-    assert portfolio.get_total_amount_invested() == 115000
+    assert portfolio.total_amount_invested == 115000
     assert portfolio.ASSETS == 4
-    assert round(sum(portfolio._Portfolio__weights)) == 1
-
+    assert round(sum(portfolio.weights)) == 1
+#
 def test_stock_should_be_deleted():
     # given
     tickers = ["AMZN", "AAPL", "FB"]
@@ -39,8 +39,7 @@ def test_stock_should_be_deleted():
     portfolio.create_portfolio(tickers, amounts)
 
     portfolio.delete_stock_from_portfolio(ticker="FB")
-    cov = portfolio.calculate_cov()
-    assert portfolio.get_total_amount_invested() == 60000
+    assert portfolio.total_amount_invested == 60000
     assert portfolio.ASSETS == 2
-    assert round(sum(portfolio._Portfolio__weights)) == 1
-    assert isinstance(cov,pd.DataFrame)
+    assert round(sum(portfolio.weights)) == 1
+
