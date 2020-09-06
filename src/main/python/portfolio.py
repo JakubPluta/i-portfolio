@@ -1,5 +1,7 @@
 from stock import Stock
+import numpy as np
 from weights_optimizer import WeightsOptimizer
+
 
 # Portfolio metrics
 
@@ -24,6 +26,7 @@ import pandas as pd
 class Portfolio:
 
     ASSETS = 0
+    TRADING_DAYS = 252
 
     def __init__(self):
         """Portfolio should have tickers, amounts of investment like:
@@ -161,6 +164,13 @@ class Portfolio:
                              "All of weights were set-up into equal.\n"
                              "If you want to change weights go with weights, or amounts property")
 
+    def __random_weights_portfolio(self):
+        weights = np.array(np.random.random(len(self.__tickers)))
+        self.__weights = weights / np.sum(weights)
+        self.__zip_portfolio()
+
+    # TODO refactor code belowe, make it faster and more efficient
+
     def calculate_cov(self):
         returns = {}
 
@@ -172,8 +182,15 @@ class Portfolio:
         return covariance
 
     def calculate_std(self):
-        pass
+        return np.sqrt(np.dot(self.__weights, np.dot(self.calculate_cov(),self.__weights))) * np.sqrt(self.TRADING_DAYS)
 
     def calculate_expected_returns(self):
-        pass
+        returns = {}
+        for ticker in self.__tickers:
+            returns[ticker] = Stock(ticker).log_daily_returns["Close"].to_list()
+
+        returns_df = pd.DataFrame(returns)
+        return np.dot(returns_df.mean(), self.__weights) * self.TRADING_DAYS
+
+
 
