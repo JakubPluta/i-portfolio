@@ -1,6 +1,7 @@
 from portfolio import Portfolio
 from stock import Stock
 import pandas as pd
+import numpy as np
 
 
 def test_portfolio_should_be_created():
@@ -42,4 +43,6 @@ def test_stock_should_be_deleted():
     assert portfolio.total_amount_invested == 60000
     assert portfolio.ASSETS == 2
     assert round(sum(portfolio.weights)) == 1
+
+
 

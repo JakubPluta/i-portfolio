@@ -1,7 +1,8 @@
 from stock import Stock
 import numpy as np
-from weights_optimizer import WeightsOptimizer
+import functools as ft
 
+# https://blog.quantinsti.com/calculating-covariance-matrix-portfolio-variance/
 
 # Portfolio metrics
 
@@ -169,27 +170,47 @@ class Portfolio:
         self.__weights = weights / np.sum(weights)
         self.__zip_portfolio()
 
-    # TODO refactor code belowe, make it faster and more efficient
-
-    def calculate_cov(self):
-        returns = {}
-
-        for ticker in self.__tickers:
-            returns[ticker] = Stock(ticker).log_daily_returns["Close"].to_list()
-
-        returns_df = pd.DataFrame(returns)
-        covariance = returns_df.cov()
-        return covariance
-
-    def calculate_std(self):
-        return np.sqrt(np.dot(self.__weights, np.dot(self.calculate_cov(),self.__weights))) * np.sqrt(self.TRADING_DAYS)
-
-    def calculate_expected_returns(self):
+    @ft.lru_cache()
+    def __get_portfolio_returns(self):
+        """Log returns of portfolio assets calculated using closing prices
+        :return: DataFrame with portfolio assets log returns
+        """
         returns = {}
         for ticker in self.__tickers:
             returns[ticker] = Stock(ticker).log_daily_returns["Close"].to_list()
+        return pd.DataFrame(returns)
 
-        returns_df = pd.DataFrame(returns)
+    def calculate_portfolio_cov(self):
+        """Calculate portfolio covariance matrix
+        :return: DataFrame with covariance of portfolio assets
+        """
+        returns_df = self.__get_portfolio_returns()
+        return returns_df.cov()
+
+    def calculate_portfolio_variance(self):
+        """Portfolio variance is a measurement of risk, of how the aggregate actual returns of a
+        set of securities making up a portfolio fluctuate over time.
+        This portfolio variance statistic is calculated using the standard deviations of each security
+        in the portfolio as well as the correlations of each security pair in the portfolio."""
+
+        cov_annualized = self.calculate_portfolio_cov() * self.TRADING_DAYS
+        return np.dot(self.__weights, np.dot(cov_annualized, self.__weights))
+
+    def calculate_portfolio_volatility(self):
+        """The volatility of a portfolio of stocks is a measure of how wildly the total
+        value of all the stocks in that portfolio appreciates or declines.
+        :return: Annualized Portfolio Volatility (Portfolio Risk)
+        """
+        return np.sqrt(np.dot(self.__weights,
+                              np.dot(self.calculate_portfolio_cov()*self.TRADING_DAYS, self.__weights)))
+
+    def calculate_portfolio_expected_returns(self):
+        """The expected return of a portfolio is calculated by multiplying the weight of each asset
+        by its expected return and adding the values for each investment.
+        We return here annualized expected returns. So we multiply our results by 252 (number of trading days in year)
+        :return: Annualized portfolio expected return
+        """
+        returns_df = self.__get_portfolio_returns()
         return np.dot(returns_df.mean(), self.__weights) * self.TRADING_DAYS
 
 
