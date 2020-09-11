@@ -1,6 +1,8 @@
 from stock import Stock
 import numpy as np
 import functools as ft
+from metrics import METRICS_DICT
+from markovitz import MarkowitzPortfolio
 
 # https://blog.quantinsti.com/calculating-covariance-matrix-portfolio-variance/
 
@@ -44,11 +46,12 @@ class Portfolio:
                 }
         """
 
-        self.__tickers = []
-        self.__amounts = []
-        self.__weights = []
-        self.__portfolio = {}
+        self.__tickers: list = []
+        self.__amounts: list = []
+        self.__weights: list = []
+        self.__portfolio: dict = {}
         self.__total_investment = None
+        self.__returns: pd.DataFrame = None
 
     def create_portfolio(self, tickers: list, amounts: list):
         if len(tickers) == len(amounts):
@@ -67,7 +70,7 @@ class Portfolio:
             self.__tickers.append(ticker)
             self.__amounts.append(amount)
             self.ASSETS += 1
-        self._update_portfolio()
+            self._update_portfolio()
 
     def delete_stock_from_portfolio(self, ticker: str):
         try:
@@ -147,6 +150,7 @@ class Portfolio:
         self.__calculate_weights()
         self.__calculate_total_amount_invested()
         self.__zip_portfolio()
+        self.__get_portfolio_returns()
 
     def __calculate_total_amount_invested(self):
         self.__total_investment = sum(self.__amounts)
@@ -178,21 +182,29 @@ class Portfolio:
         returns = {}
         for ticker in self.__tickers:
             returns[ticker] = Stock(ticker).log_daily_returns["Close"].to_list()
-        return pd.DataFrame(returns)
+        self.__returns = pd.DataFrame(returns)
+
+    @ft.lru_cache()
+    def __get_key_metrics(self):
+        metrics = {}
+        for ticker in self.__tickers:
+            metrics[ticker] = Stock(ticker)._get_metrics()
+        return pd.DataFrame(metrics)
+
+    def calculate_portfolio_metrics(self):
+        return (self.__get_key_metrics() * self.__weights).mean(axis=1).to_dict()
 
     def calculate_portfolio_cov(self):
         """Calculate portfolio covariance matrix
         :return: DataFrame with covariance of portfolio assets
         """
-        returns_df = self.__get_portfolio_returns()
-        return returns_df.cov()
+        return self.__returns.cov()
 
     def calculate_portfolio_variance(self):
         """Portfolio variance is a measurement of risk, of how the aggregate actual returns of a
         set of securities making up a portfolio fluctuate over time.
         This portfolio variance statistic is calculated using the standard deviations of each security
         in the portfolio as well as the correlations of each security pair in the portfolio."""
-
         cov_annualized = self.calculate_portfolio_cov() * self.TRADING_DAYS
         return np.dot(self.__weights, np.dot(cov_annualized, self.__weights))
 
@@ -208,10 +220,28 @@ class Portfolio:
         """The expected return of a portfolio is calculated by multiplying the weight of each asset
         by its expected return and adding the values for each investment.
         We return here annualized expected returns. So we multiply our results by 252 (number of trading days in year)
+        Also can be calculated with formula: round(np.sum(mean_daily_returns * weights) * 252,2)
         :return: Annualized portfolio expected return
         """
-        returns_df = self.__get_portfolio_returns()
-        return np.dot(returns_df.mean(), self.__weights) * self.TRADING_DAYS
+        return np.dot(self.__returns.mean(), self.__weights) * self.TRADING_DAYS
 
+    def calculate_portfolio_sharpe_ratio(self):
+        return self.calculate_portfolio_expected_returns()/self.calculate_portfolio_volatility()
 
+    def show_portfolio_statistics(self):
+        print()
+        print("Portfolio contains:\n"
+              f"Tickers: {', '.join(self.__tickers)}\n"
+              f"Amounts: {', '.join(map(str, self.__amounts))}\n"
+              f"Weights: {', '.join(map(str, self.__weights))}\n"
+              f"Portfolio Expected Returns: {round(self.calculate_portfolio_expected_returns(),2)}\n"
+              f"Portfolio Variance: {round(self.calculate_portfolio_variance(),2)}\n"
+              f"Portfolio Volatility: {round(self.calculate_portfolio_volatility(),2)}\n"
+              f"Portfolio Sharpe Ratio: {round(self.calculate_portfolio_sharpe_ratio(),2)}")
+        for metric, value in self.calculate_portfolio_metrics().items():
+              print(f"Portfolio Weighted Average {METRICS_DICT.get(metric)}: {round(value,2)}")
+
+    def optimize_markovitz_portfolio(self):
+        mean_returns, cov, assets = self.__returns.mean(), self.calculate_portfolio_cov(), len(self.__tickers)
+        return MarkowitzPortfolio(assets, cov, assets).optimize()
 

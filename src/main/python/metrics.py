@@ -18,3 +18,18 @@ METRICS = [
     'roeTTM',
     'roiTTM',
 ]
+
+
+METRICS_DICT = {
+    'bookValuePerShareAnnual' : 'Book Value Per Share Annual',
+    'bookValueShareGrowth5Y': 'Book Value Per Share Growth 5y',
+    'dividendPerShareAnnual' : 'Dividends Per Share Annual',
+    'dividendsPerShareTTM' : 'Dividends Per Share TTM',
+    'ebitdPerShareTTM' : "EBITDA Per Share TTM",
+    'freeCashFlowPerShareTTM' : "FCF Per Share TTM",
+    'revenueGrowth3Y' : "Revenue Growth 3y",
+    'revenueGrowth5Y': "Revenue Growth 5y",
+    'roaeTTM' : "ROA TTM",
+    'roeTTM' : "ROE TTM",
+    'roiTTM' : "ROI TTM",
+}

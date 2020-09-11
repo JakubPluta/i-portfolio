@@ -35,7 +35,7 @@ class Stock:
         renaming columns, changing order, and transforming date timestamp to date
         :return:
         """
-        quotes = self.__get_quotes()
+        quotes = self._get_quotes()
         data = pd.DataFrame(quotes)
         if data.empty:
             raise ValueError("The data frame with Quotes is empty!")
@@ -44,13 +44,13 @@ class Stock:
         return data[["Date", "Close"]].set_index("Date")
 
     def get_current_metrics_df(self):
-        metrics = self.__get_metrics().items()
+        metrics = self._get_metrics().items()
         current = pd.DataFrame(metrics)
         current.columns = ["KPI", "Value"]
         return current.fillna(0).set_index("KPI")
 
     def get_company_info(self):
-        return pd.DataFrame(self.__get_company_info().items())
+        return pd.DataFrame(self._get_company_info().items())
 
     def calculate_daily_returns(self):
         return calculate_daily_returns(self.quotes)
@@ -66,13 +66,13 @@ class Stock:
 
     # Private methods
 
-    def __get_company_info(self):
+    def _get_company_info(self):
         """Get basic company information
         :return: json with company information
         """
         return self.client.company_profile(symbol=self.ticker)
 
-    def __get_metrics(self):
+    def _get_metrics(self):
         """Get financial metrics from Finnhub API
         :return: Financial Metrics for current year
         """
@@ -80,7 +80,7 @@ class Stock:
         if metrics.get("metric"):
             return {kpi: metrics.get("metric")[kpi] for kpi in METRICS}
 
-    def __get_quotes(self):
+    def _get_quotes(self):
         """Get quotes for stock for last 5 years.
         :return: quotes of stock with Open, High, Low, Close, Volume, Timestamp
         """
